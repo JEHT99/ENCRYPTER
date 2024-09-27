@@ -6,14 +6,21 @@ import os
 def generate_key():
     # Generate a 256-bit (32-byte) key for AES
     key = os.urandom(32)  # This is your encryption key (keep it secret!)
-    file = open("crypto.key","wb")
-    file.write(key)
-    file.close()
+    try:
+        file = open("crypto.key","wb")
+        file.write(key)
+        file.close()
+    except:
+        return False
+    return True
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def read_key(filePath):
-    file = open(filePath,"rb")
-    key = file.read()
-    file.close()
+    try:
+        file = open(filePath,"rb")
+        key = file.read()
+        file.close()
+    except:
+        return None
     return key
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def encrypt_text(key, plaintext):
