@@ -120,6 +120,20 @@ class DataBase:
             return cur.fetchall()
         except:
             return []
+    #////////////////////////////////////////////////////////////////////////////////////////////////
+    def getRecord(self, target)-> list:
+        if self.connection == None:
+            return []
+        
+        if str(type(target)) != "<class 'int'>":
+            return 2
+        
+        cur = (self.connection).cursor()
+        try:
+            cur.execute('''SELECT * FROM tb_accounts WHERE account_id=?''', (target,))
+            return cur.fetchall()
+        except:
+            return []
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 '''exitCodes = {
     0: "Success",
@@ -129,5 +143,5 @@ class DataBase:
     }'''
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 x = DataBase()
-print(x.getRecords())
+print(x.getRecord(2))
 #print(x.updateRecord(2,"facebook.com","jeht1999@outlook.com","TEST22"))
