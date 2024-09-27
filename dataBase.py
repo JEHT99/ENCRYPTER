@@ -1,3 +1,4 @@
+import crypto
 import sqlite3
 import os
 import re
@@ -50,15 +51,16 @@ class DataBase:
         
         return True
     #////////////////////////////////////////////////////////////////////////////////////////////////
-    def addRecord(self, website:str, email:str, password:str)-> int:
+    def addRecord(self, website:str, email:str, password:str, key:bytes)-> int:
         if self.connection == None:
             return 1
         
         website = str(website).upper()
         email = str(email).upper()
-        password = str(password)
+        password = crypto.encrypt_text(key,str(password)) 
 
-        if re.search(reWebsite, website) == None or re.search(reEmail, email) == None:
+        if(re.search(reWebsite, website) == None or
+           re.search(reEmail, email) == None or str(type(key)) != "<class 'bytes'>"):
             return 2
 
         cur = (self.connection).cursor()
@@ -87,17 +89,17 @@ class DataBase:
         
         return 0
     #////////////////////////////////////////////////////////////////////////////////////////////////
-    def updateRecord(self, target:int, website:str, email:str, password:str)-> int:
+    def updateRecord(self, target:int, website:str, email:str, password:str, key:bytes)-> int:
         if self.connection == None:
             return 1
         
         website = str(website).upper()
         email = str(email).upper()
-        password = str(password)
+        password = crypto.encrypt_text(key,str(password)) 
 
         if(re.search(reWebsite, website) == None or
-           re.search(reEmail, email) == None or
-           str(type(target)) != "<class 'int'>"):
+           re.search(reEmail, email) == None or str(type(target)) != "<class 'int'>"
+           or str(type(key)) != "<class 'bytes'>"):
             return 2
         
         cur = (self.connection).cursor()
@@ -142,6 +144,3 @@ class DataBase:
     3: "Failed to execute query"
     }'''
 #////////////////////////////////////////////////////////////////////////////////////////////////////
-x = DataBase()
-print(x.getRecord(2))
-#print(x.updateRecord(2,"facebook.com","jeht1999@outlook.com","TEST22"))
