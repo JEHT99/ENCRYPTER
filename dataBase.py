@@ -71,7 +71,7 @@ class DataBase:
         
         return 0
     #////////////////////////////////////////////////////////////////////////////////////////////////
-    def deleteRecord(self, target:int):
+    def deleteRecord(self, target:int)-> int:
         if self.connection == None:
             return 1
         
@@ -87,7 +87,7 @@ class DataBase:
         
         return 0
     #////////////////////////////////////////////////////////////////////////////////////////////////
-    def updateRecord(self, target:int, website:str, email:str, password:str):
+    def updateRecord(self, target:int, website:str, email:str, password:str)-> int:
         if self.connection == None:
             return 1
         
@@ -109,6 +109,17 @@ class DataBase:
             return 3
         
         return 0
+    #////////////////////////////////////////////////////////////////////////////////////////////////
+    def getRecords(self)-> list:
+        if self.connection == None:
+            return []
+        
+        cur = (self.connection).cursor()
+        try:
+            cur.execute('''SELECT * FROM tb_accounts;''')
+            return cur.fetchall()
+        except:
+            return []
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 '''exitCodes = {
     0: "Success",
@@ -118,4 +129,5 @@ class DataBase:
     }'''
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 x = DataBase()
-print(x.updateRecord(2,"facebook.com","jeht1999@outlook.com","TEST22"))
+print(x.getRecords())
+#print(x.updateRecord(2,"facebook.com","jeht1999@outlook.com","TEST22"))
