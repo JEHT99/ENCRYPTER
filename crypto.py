@@ -1,9 +1,10 @@
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import padding
 import os
+import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
-def generate_key():
+def generate_key()-> bool:
     # Generate a 256-bit (32-byte) key for AES
     key = os.urandom(32)  # This is your encryption key (keep it secret!)
     try:
@@ -14,7 +15,11 @@ def generate_key():
         return False
     return True
 #////////////////////////////////////////////////////////////////////////////////////////////////////
-def read_key(filePath):
+def read_key(filePath:str) -> bytes:
+    reFilePath = "\.key$"
+    if re.search(reFilePath, str(filePath)) == None:
+        return None
+    
     try:
         file = open(filePath,"rb")
         key = file.read()
@@ -23,7 +28,7 @@ def read_key(filePath):
         return None
     return key
 #////////////////////////////////////////////////////////////////////////////////////////////////////
-def encrypt_text(key, plaintext):
+def encrypt_text(key:bytes, plaintext:str)-> bytes:
     # Generate a random initialization vector (IV)
     iv = os.urandom(16)
 
@@ -41,7 +46,7 @@ def encrypt_text(key, plaintext):
     # Return both the IV and the ciphertext (IV is needed for decryption)
     return iv + ciphertext
 #////////////////////////////////////////////////////////////////////////////////////////////////////
-def decrypt_text(key, ciphertext):
+def decrypt_text(key:bytes, ciphertext:bytes)-> str:
     # Extract the IV from the ciphertext (first 16 bytes)
     iv = ciphertext[:16]
     actual_ciphertext = ciphertext[16:]
