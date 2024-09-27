@@ -48,13 +48,6 @@ class DataBase:
         return True
     #////////////////////////////////////////////////////////////////////////////////////////////////
     def addRecord(self, website:str, email:str, password:str, key:str)-> int:
-        '''exitCodes = {
-            0: "Success",
-            1: "Failed to connect with the data base",
-            2: "Bad parameters",
-            3: "Failed to execute query"
-        }'''
-
         if self.connection == None:
             return 1
         
@@ -77,6 +70,29 @@ class DataBase:
             return 3
         
         return 0
+    #////////////////////////////////////////////////////////////////////////////////////////////////
+    def deleteRecord(self, target:int):
+        if self.connection == None:
+            return 1
+        
+        if str(type(target)) != "<class 'int'>":
+            return 2
+        
+        cur = (self.connection).cursor()
+        try:
+            cur.execute('''DELETE FROM tb_accounts WHERE account_id=?;''', (target,))
+            (self.connection).commit()
+        except:
+            return 3
+        
+        return 0
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+'''exitCodes = {
+    0: "Success",
+    1: "Failed to connect with the data base",
+    2: "Bad parameters",
+    3: "Failed to execute query"
+    }'''
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 x = DataBase()
-print(x.addrecord("facebookcom","jeht99@outlook.com", "NEW99"))
+print(x.deleteRecord(1))
