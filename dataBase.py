@@ -2,6 +2,9 @@ import sqlite3
 import os
 import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
+reWebsite = "^([A-Z0-9]+\.)+[A-Z0-9]+$"
+reEmail = "^[A-Z0-9\_\.\+\-]+@([A-Z0-9]+\.)+[A-Z0-9]+$"
+#////////////////////////////////////////////////////////////////////////////////////////////////////
 class DataBase:
     def __init__(self) -> None:
         self.dbName = "dataBase.db"
@@ -47,16 +50,13 @@ class DataBase:
         
         return True
     #////////////////////////////////////////////////////////////////////////////////////////////////
-    def addRecord(self, website:str, email:str, password:str, key:str)-> int:
+    def addRecord(self, website:str, email:str, password:str)-> int:
         if self.connection == None:
             return 1
         
         website = str(website).upper()
         email = str(email).upper()
         password = str(password)
-    
-        reWebsite = "^([A-Z0-9]+\.)+[A-Z0-9]+$"
-        reEmail = "^[A-Z0-9\_\.\+\-]+@([A-Z0-9]+\.)+[A-Z0-9]+$"
 
         if re.search(reWebsite, website) == None or re.search(reEmail, email) == None:
             return 2
@@ -86,6 +86,29 @@ class DataBase:
             return 3
         
         return 0
+    #////////////////////////////////////////////////////////////////////////////////////////////////
+    def updateRecord(self, target:int, website:str, email:str, password:str):
+        if self.connection == None:
+            return 1
+        
+        website = str(website).upper()
+        email = str(email).upper()
+        password = str(password)
+
+        if(re.search(reWebsite, website) == None or
+           re.search(reEmail, email) == None or
+           str(type(target)) != "<class 'int'>"):
+            return 2
+        
+        cur = (self.connection).cursor()
+        try:
+            cur.execute('''UPDATE tb_accounts SET website=?, email=?, password=?
+                        WHERE account_id=?;''',(website, email, password, target))
+            (self.connection).commit()
+        except:
+            return 3
+        
+        return 0
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 '''exitCodes = {
     0: "Success",
@@ -95,4 +118,4 @@ class DataBase:
     }'''
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 x = DataBase()
-print(x.deleteRecord(1))
+print(x.updateRecord(2,"facebook.com","jeht1999@outlook.com","TEST22"))
