@@ -49,24 +49,28 @@ def createKey(event=None):
         showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def loadKeyView(event=None):
-    toplevel = ChildForm("RSA Key Loader", 470, 100)
+    def loadKey():
+        file = tk.filedialog.askopenfilename(title="Select",initialdir="C://",
+                filetypes=(("Token","*.key"),))
+        
+        keyPath.set(file)
+        if keyPath.get() != "":
+            showMessage(0)
+    #////////////////////////////////////////////////////////////////////////////////////////////////
+    toplevel = ChildForm("RSA Key Loader", 400, 100)
 
-    fileContent = tk.StringVar()
     currentFile = customtkinter.CTkEntry(toplevel.getFormType(), width=300, state="readonly",
-                                         textvariable=fileContent)
+                    textvariable=keyPath)
     currentFile.place(x=10, y=30)
 
-    upload = customtkinter.CTkButton(toplevel.getFormType(), text="Brwose", command=None,
-                    width=50, height=30, corner_radius=100)
+    upload = customtkinter.CTkButton(toplevel.getFormType(), text="Brwose", command=loadKey,
+                width=50, height=30, corner_radius=100)
     upload.place(x=320, y=30)
-
-    submit = customtkinter.CTkButton(toplevel.getFormType(), text="Load", state="disabled",
-                    command=None, width=50, height=30, corner_radius=100)
-    submit.place(x=400, y=30)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #Form set up
 customtkinter.set_appearance_mode("dark")
 root = ParentForm("Passwords Encrypter", 600, 500)
+keyPath = tk.StringVar()
 
 #Menu set up
 menuBar = tk.Menu()
