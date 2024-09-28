@@ -8,22 +8,19 @@ import re
 myDB = DataBase()
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def showMessage(option: int):
-    if option == 0:
-        tk.messagebox.showinfo(title="Success",
-                               message="Operation have been completed")
-        return
+    messages=[
+        ["Success","Operation has been completed"],
+        ["Error", "Operation failed, try it again"],
+        ["Error", "Wrong key"]
+    ]
 
-    if option == 1:
-        tk.messagebox.showerror(title="Error",
-                                message="Operation failed, try it again")
-        return
-    
-    if option == 2:
-        tk.messagebox.showerror(title="Error",
-                                message="Wrong key")
-        return
-    
-    return
+    if option in range(len(messages)):
+        if option == 0:
+            tk.messagebox.showinfo(title=messages[option][0],
+                               message=messages[option][1])
+        else:
+            tk.messagebox.showerror(title=messages[option][0],
+                               message=messages[option][1])
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def createView(event=None):
     print("Create")
