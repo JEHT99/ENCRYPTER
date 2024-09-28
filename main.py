@@ -2,13 +2,14 @@ import tkinter as tk
 import customtkinter
 from dataBase import DataBase
 from crypto import generate_key, read_key
+import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 myDB = DataBase()
 keyPath = ""
 messages = {
     "success": ["Notify", "Operation have been completed"],
-    "fail" : ["Error", "Failed operation, try it again"],
+    "fail" : ["Error", "Operation failed, try it again"],
     "badKey" : ["Error", "Wrong key"]
 }
 #////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,7 +20,15 @@ def editView(event=None):
     print("Edit")
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def deleteView(event=None):
-    print("Delete")
+    dialog = customtkinter.CTkInputDialog(text="Type account id to delete it:", title="Delete account")
+    accountId = dialog.get_input()  # waits for input
+
+    if re.search("^\d+$", accountId) != None and myDB.deleteRecord(accountId):
+        tk.messagebox.showinfo(message = messages["success"][1],
+                            title = messages["success"][0])
+    else:
+        tk.messagebox.showerror(message = messages["fail"][1],
+                            title = messages["fail"][0])
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def createKey(event=None):
     if generate_key() == True:
