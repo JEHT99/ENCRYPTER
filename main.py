@@ -24,7 +24,7 @@ def showMessage(option: int):
                                message=messages[option][1])
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def createView(event=None):
-    print("Create")
+    toplevel = ChildForm("Record creator", 300, 200)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def editView(event=None):
     print("Edit")
@@ -49,7 +49,7 @@ def createKey(event=None):
         showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def loadKeyView(event=None):
-    toplevel = ChildForm("RSA Key Loader", 500, 100)
+    toplevel = ChildForm("RSA Key Loader", 470, 100)
 
     fileContent = tk.StringVar()
     currentFile = customtkinter.CTkEntry(toplevel.getFormType(), width=300, state="readonly",
@@ -57,12 +57,12 @@ def loadKeyView(event=None):
     currentFile.place(x=10, y=30)
 
     upload = customtkinter.CTkButton(toplevel.getFormType(), text="Brwose", command=None,
-                    width=20, height=2)
-    upload.place(x=260, y=30)
+                    width=50, height=30, corner_radius=100)
+    upload.place(x=320, y=30)
 
     submit = customtkinter.CTkButton(toplevel.getFormType(), text="Load", state="disabled",
-                    command=None, width=20, height=2)
-    submit.place(x=420, y=30)
+                    command=None, width=50, height=30, corner_radius=100)
+    submit.place(x=400, y=30)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #Form set up
 customtkinter.set_appearance_mode("dark")
