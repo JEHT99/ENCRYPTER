@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter
 from dataBase import DataBase
+from forms import ParentForm, ChildForm
 from crypto import generate_key, read_key
 import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,32 +45,25 @@ def createKey(event=None):
     else:
         showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
-def loadKey(event=None):
-    toplevel = customtkinter.CTkToplevel(root)
-    toplevel.resizable(0,0)
-    toplevel.title("RSA Key Loader")
-    toplevel.geometry('500x100')
+def loadKeyView(event=None):
+    toplevel = ChildForm("RSA Key Loader", 500, 100)
 
     fileContent = tk.StringVar()
-    currentFile = customtkinter.CTkEntry(toplevel, width=300, state="readonly",
+    currentFile = customtkinter.CTkEntry(toplevel.getFormType(), width=300, state="readonly",
                                          textvariable=fileContent)
     currentFile.place(x=10, y=30)
 
-    upload = customtkinter.CTkButton(toplevel, text="Brwose", command=None,
+    upload = customtkinter.CTkButton(toplevel.getFormType(), text="Brwose", command=None,
                     width=20, height=2)
     upload.place(x=260, y=30)
 
-    submit = customtkinter.CTkButton(toplevel, text="Load", state="disabled",
+    submit = customtkinter.CTkButton(toplevel.getFormType(), text="Load", state="disabled",
                     command=None, width=20, height=2)
     submit.place(x=420, y=30)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #Form set up
 customtkinter.set_appearance_mode("dark")
-root = customtkinter.CTk()
-root.resizable(0,0)
-root.title("Passwords Encrypter")
-root.geometry('600x500')
-#keyPath = tk.StringVar()
+root = ParentForm("Passwords Encrypter", 600, 500)
 
 #Menu set up
 menuBar = tk.Menu()
@@ -80,27 +74,27 @@ mainMenu.add_command(
     accelerator = "CTRL+N",
     command = createView
 )
-root.bind_all("<Control-n>",createView)
-root.bind_all("<Control-N>",createView)
+root.getFormType().bind_all("<Control-n>",createView)
+root.getFormType().bind_all("<Control-N>",createView)
 
 mainMenu.add_command(
     label = "Edit record",
     accelerator = "CTRL+E",
     command = editView
 )
-root.bind_all("<Control-e>",editView)
-root.bind_all("<Control-E>",editView)
+root.getFormType().bind_all("<Control-e>",editView)
+root.getFormType().bind_all("<Control-E>",editView)
 
 mainMenu.add_command(
     label = "Delete record",
     accelerator = "CTRL+D",
     command = deleteView
 )
-root.bind_all("<Control-d>",deleteView)
-root.bind_all("<Control-D>",deleteView)
+root.getFormType().bind_all("<Control-d>",deleteView)
+root.getFormType().bind_all("<Control-D>",deleteView)
 
 mainMenu.add_separator()
-mainMenu.add_command(label="Quit", command=root.destroy)
+mainMenu.add_command(label="Quit", command=root.getFormType().destroy)
 
 #RSA options
 opMenu = tk.Menu(menuBar, tearoff=False)
@@ -110,11 +104,11 @@ opMenu.add_command(
 )
 opMenu.add_command(
     label = "Load key",
-    command = loadKey
+    command = loadKeyView
 )
 
 menuBar.add_cascade(menu=mainMenu, label="File")
 menuBar.add_cascade(menu=opMenu, label="Options")
-root.config(menu=menuBar)
+root.getFormType().config(menu=menuBar)
 
-root.mainloop()
+root.run()
