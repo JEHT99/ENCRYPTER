@@ -6,7 +6,6 @@ import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 myDB = DataBase()
-keyPath = ""
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def showMessage(option: int):
     if option == 0:
@@ -33,7 +32,8 @@ def editView(event=None):
     print("Edit")
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def deleteView(event=None):
-    dialog = customtkinter.CTkInputDialog(text="Type an Account ID to delete it:", title="Delete account")
+    dialog = customtkinter.CTkInputDialog(text="Type an Account ID to delete it:",
+                                          title="Delete account")
     accountId = dialog.get_input()  # waits for input
 
     if re.search("^\d+$", accountId) != None and myDB.deleteRecord(accountId):
@@ -47,12 +47,32 @@ def createKey(event=None):
     else:
         showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
+def loadKey(event=None):
+    toplevel = customtkinter.CTkToplevel(root)
+    toplevel.resizable(0,0)
+    toplevel.title("RSA Key Loader")
+    toplevel.geometry('500x100')
+
+    fileContent = tk.StringVar()
+    currentFile = customtkinter.CTkEntry(toplevel, width=300, state="readonly",
+                                         textvariable=fileContent)
+    currentFile.place(x=10, y=30)
+
+    upload = customtkinter.CTkButton(toplevel, text="Brwose", command=None,
+                    width=20, height=2)
+    upload.place(x=260, y=30)
+
+    submit = customtkinter.CTkButton(toplevel, text="Load", state="disabled",
+                    command=None, width=20, height=2)
+    submit.place(x=420, y=30)
+#////////////////////////////////////////////////////////////////////////////////////////////////////
 #Form set up
 customtkinter.set_appearance_mode("dark")
 root = customtkinter.CTk()
 root.resizable(0,0)
 root.title("Passwords Encrypter")
 root.geometry('600x500')
+#keyPath = tk.StringVar()
 
 #Menu set up
 menuBar = tk.Menu()
@@ -93,6 +113,7 @@ opMenu.add_command(
 )
 opMenu.add_command(
     label = "Load key",
+    command = loadKey
 )
 
 menuBar.add_cascade(menu=mainMenu, label="File")
