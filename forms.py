@@ -1,0 +1,27 @@
+import customtkinter
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+class Form():
+    def __init__(self, formTitle:str=None, windowWidth:int=None,
+                 windowHeight:int=None)-> None:
+        self.formTitle = formTitle
+        self.windowWidth = windowWidth
+        self.windowHeight = windowHeight
+        self.formType = None
+    #////////////////////////////////////////////////////////////////////////////////////////////////
+    def createForm(self):        
+        (self.formType).title(self.formTitle)
+        (self.formType).resizable(0,0)
+        screenWidth = (self.formType).winfo_screenwidth()
+        screenHeight = (self.formType).winfo_screenheight()
+        windowWidth = self.windowWidth
+        windowHeight = self.windowHeight
+
+        positionWidth = round(screenWidth*.10)
+        positionHeight = round(screenHeight*.10)
+
+        (self.formType).geometry(f"{windowWidth}x{windowHeight}+{positionWidth}+{positionHeight}")
+    #////////////////////////////////////////////////////////////////////////////////////////////////
+    def getFormType(self)->object:
+        return self.formType
+    #////////////////////////////////////////////////////////////////////////////////////////////////
+#////////////////////////////////////////////////////////////////////////////////////////////////////
