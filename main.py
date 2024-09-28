@@ -5,12 +5,29 @@ from crypto import generate_key, read_key
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 myDB = DataBase()
+keyPath = ""
 messages = {
-    "success": ["Notify", "Operation have been"],
+    "success": ["Notify", "Operation have been completed"],
     "fail" : ["Error", "Failed operation, try it again"],
     "badKey" : ["Error", "Wrong key"]
 }
 #////////////////////////////////////////////////////////////////////////////////////////////////////
+def createView(event=None):
+    print("Create")
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+def editView(event=None):
+    print("Edit")
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+def deleteView(event=None):
+    print("Delete")
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+def createKey(event=None):
+    if generate_key() == True:
+        tk.messagebox.showinfo(message = messages["success"][1],
+                            title = messages["success"][0])
+    else:
+        tk.messagebox.showerror(message = messages["fail"][1],
+                            title = messages["fail"][0])
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #Form set up
 customtkinter.set_appearance_mode("dark")
@@ -26,23 +43,26 @@ mainMenu = tk.Menu(menuBar, tearoff=False)
 mainMenu.add_command(
     label = "Create new record",
     accelerator = "CTRL+N",
+    command = createView
 )
-root.bind_all("<Control-n>")
-root.bind_all("<Control-N>")
+root.bind_all("<Control-n>",createView)
+root.bind_all("<Control-N>",createView)
 
 mainMenu.add_command(
     label = "Edit record",
     accelerator = "CTRL+E",
+    command = editView
 )
-root.bind_all("<Control-e>")
-root.bind_all("<Control-E>")
+root.bind_all("<Control-e>",editView)
+root.bind_all("<Control-E>",editView)
 
 mainMenu.add_command(
     label = "Delete record",
     accelerator = "CTRL+D",
+    command = deleteView
 )
-root.bind_all("<Control-d>")
-root.bind_all("<Control-D>")
+root.bind_all("<Control-d>",deleteView)
+root.bind_all("<Control-D>",deleteView)
 
 mainMenu.add_separator()
 mainMenu.add_command(label="Quit", command=root.destroy)
@@ -51,6 +71,7 @@ mainMenu.add_command(label="Quit", command=root.destroy)
 opMenu = tk.Menu(menuBar, tearoff=False)
 opMenu.add_command(
     label = "Generate key",
+    command = createKey
 )
 opMenu.add_command(
     label = "Load key",
