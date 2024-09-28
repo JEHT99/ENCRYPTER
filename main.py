@@ -32,7 +32,10 @@ def editView(event=None):
 def deleteView(event=None):
     dialog = customtkinter.CTkInputDialog(text="Type an Account ID to delete it:",
                                           title="Delete account")
-    accountId = dialog.get_input()  # waits for input
+    accountId = dialog.get_input()
+
+    if accountId == None:
+        return
 
     if re.search("^\d+$", accountId) != None and myDB.deleteRecord(accountId):
         showMessage(0)
