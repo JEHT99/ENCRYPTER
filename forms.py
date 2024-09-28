@@ -35,3 +35,13 @@ class ParentForm(Form):
     def run(self)->None:
         self.formType.mainloop()
 #////////////////////////////////////////////////////////////////////////////////////////////////////
+class ChildForm(Form):
+    def __init__(self, formTitle:str=None, windowWidth:int=None,
+                 windowHeight:int=None):
+        Form.__init__(self, formTitle, windowWidth, windowHeight)
+        self.formType = customtkinter.CTkToplevel()
+        self.createForm()
+        self.formType.wm_attributes("-topmost", 1)
+        self.formType.focus_force()
+        self.formType.grab_set()
+#////////////////////////////////////////////////////////////////////////////////////////////////////
