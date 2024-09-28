@@ -7,11 +7,24 @@ import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 myDB = DataBase()
 keyPath = ""
-messages = {
-    "success": ["Notify", "Operation have been completed"],
-    "fail" : ["Error", "Operation failed, try it again"],
-    "badKey" : ["Error", "Wrong key"]
-}
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+def showMessage(option: int):
+    if option == 0:
+        tk.messagebox.showinfo(title="Success",
+                               message="Operation have been completed")
+        return
+
+    if option == 1:
+        tk.messagebox.showerror(title="Error",
+                                message="Operation failed, try it again")
+        return
+    
+    if option == 2:
+        tk.messagebox.showerror(title="Error",
+                                message="Wrong key")
+        return
+    
+    return
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def createView(event=None):
     print("Create")
@@ -20,23 +33,19 @@ def editView(event=None):
     print("Edit")
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def deleteView(event=None):
-    dialog = customtkinter.CTkInputDialog(text="Type account id to delete it:", title="Delete account")
+    dialog = customtkinter.CTkInputDialog(text="Type an Account ID to delete it:", title="Delete account")
     accountId = dialog.get_input()  # waits for input
 
     if re.search("^\d+$", accountId) != None and myDB.deleteRecord(accountId):
-        tk.messagebox.showinfo(message = messages["success"][1],
-                            title = messages["success"][0])
+        showMessage(0)
     else:
-        tk.messagebox.showerror(message = messages["fail"][1],
-                            title = messages["fail"][0])
+        showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def createKey(event=None):
     if generate_key() == True:
-        tk.messagebox.showinfo(message = messages["success"][1],
-                            title = messages["success"][0])
+        showMessage(0)
     else:
-        tk.messagebox.showerror(message = messages["fail"][1],
-                            title = messages["fail"][0])
+        showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #Form set up
 customtkinter.set_appearance_mode("dark")
