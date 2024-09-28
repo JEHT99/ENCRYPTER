@@ -45,3 +45,10 @@ class ChildForm(Form):
         self.formType.focus_force()
         self.formType.grab_set()
 #////////////////////////////////////////////////////////////////////////////////////////////////////
+def level():
+    Top = ChildForm("CHILD", 500, 200)
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+root = ParentForm("PARENT",500, 200)
+button = customtkinter.CTkButton(root.getFormType(), text="CTkButton", command=level)
+button.pack(pady=20)
+root.run()
