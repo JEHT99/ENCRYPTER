@@ -58,7 +58,7 @@ def createView(event=None, flag:bool=True, target=None):
             return
 
         showMessage(0)
-        
+
         for item in tree.get_children():
             tree.delete(item)
 
@@ -189,7 +189,7 @@ def showPassword(event=None):
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #Form set up
 customtkinter.set_appearance_mode("dark")
-root = ParentForm("Passwords Encrypter", 600, 400)
+root = ParentForm("Passwords Encrypter", 500, 400)
 keyPath = tk.StringVar()
 websiteU = tk.StringVar()
 emailU = tk.StringVar()
@@ -221,7 +221,7 @@ root.getFormType().config(menu=menuBar)
 
 #Tree view
 records = myDB.getRecords()
-tree = ttk.Treeview(root.getFormType())
+tree = ttk.Treeview(root.getFormType(), height=200)
 
 # Define columns
 tree['columns'] = ("Website", "Email")
@@ -238,7 +238,8 @@ tree.heading("Email", text="Email", anchor=tk.CENTER)
 
 # Add data to the Treeview
 for item in records:
-    tree.insert(parent='', index='end', iid=item[0], text=item[0], values=(item[1],item[2]))
+    tree.insert(parent='', index='end', iid=item[0],
+        text=item[0], values=(item[1],item[2]))
 
 tree.bind("<Double-1>", showPassword)
 
