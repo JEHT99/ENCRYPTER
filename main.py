@@ -1,5 +1,6 @@
 import tkinter as tk
 import customtkinter
+from functools import partial
 from Modules.dataBase import DataBase
 from Modules.forms import ParentForm, ChildForm
 from Modules.crypto import generate_key, read_key
@@ -26,21 +27,26 @@ def showMessage(option: int):
                                message=messages[option][1])
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def activateShortCuts(form:object):
-    form.bind_all("<Control-n>",createView)
-    form.bind_all("<Control-N>",createView)
+    form.bind_all("<Control-n>",partial(createView,True))
+    form.bind_all("<Control-N>",partial(createView,True))
     form.bind_all("<Control-e>",editView)
     form.bind_all("<Control-E>",editView)
     form.bind_all("<Control-d>",deleteView)
     form.bind_all("<Control-D>",deleteView)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
-def createView(event=None):
+def createView(event=None, flag:bool=True, target=None):
     def submit():
         key = read_key(keyPath.get())
         if key == None:
             showMessage(1)
             return
         
-        status = myDB.addRecord(website.get(), email.get(),password.get(),key)
+        if flag == False:
+            status = myDB.updateRecord(target, website.get(),
+                        email.get(),password.get(), key)
+        else:
+            status = myDB.addRecord(website.get(), email.get(),
+                        password.get(),key)
         
         if status == 2:
             showMessage(3)
@@ -50,18 +56,31 @@ def createView(event=None):
             showMessage(1)
             return
 
-        current.destroy()
         showMessage(0)
+        current.destroy()
     #////////////////////////////////////////////////////////////////////////////////////////////////
-    toplevel = ChildForm("Record creator", 300, 200)
+    toplevel = ChildForm("Record Creator", 300, 200)
     current = toplevel.getFormType()
+
+    record = myDB.getRecord(target)
+
+    if flag == True:
+        websiteU.set("")
+        emailU.set("")
+    elif len(record) == 0:
+        showMessage(1)
+        return
+    else:
+        websiteU.set(record[0][1])
+        emailU.set(record[0][2])
+        
 
     label1 = customtkinter.CTkLabel(current,
                 text="Website", fg_color="transparent")
     label1.place(x=10, y=20)
 
     website = customtkinter.CTkEntry(current,
-                placeholder_text="Google.com", width=200)
+                placeholder_text="Google.com", width=200, textvariable=websiteU)
     website.place(x=80, y=20)
 
 
@@ -70,7 +89,7 @@ def createView(event=None):
     label2.place(x=10, y=60)
 
     email = customtkinter.CTkEntry(current,
-                placeholder_text="example@gmail.com", width=200)
+                placeholder_text="example@gmail.com", width=200, textvariable=emailU)
     email.place(x=80, y=60)
 
 
@@ -87,20 +106,20 @@ def createView(event=None):
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def editView(event=None):
     dialog = customtkinter.CTkInputDialog(text="Type an Account ID to edit it:",
-                                          title="Edit account")
+                                          title="Edit Account")
     accountId = dialog.get_input()
 
     if accountId == None:
         return
 
     if re.search("^\d+$", accountId) != None:
-        createView()
+        createView(flag=False,target=int(accountId))
     else:
         showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def deleteView(event=None):
     dialog = customtkinter.CTkInputDialog(text="Type an Account ID to delete it:",
-                                          title="Delete account")
+                                          title="Delete Account")
     accountId = dialog.get_input()
 
     if accountId == None:
@@ -145,6 +164,8 @@ def loadKeyView(event=None):
 customtkinter.set_appearance_mode("dark")
 root = ParentForm("Passwords Encrypter", 600, 500)
 keyPath = tk.StringVar()
+websiteU = tk.StringVar()
+emailU = tk.StringVar()
 
 #Menu set up
 menuBar = tk.Menu()
@@ -153,7 +174,7 @@ mainMenu = tk.Menu(menuBar, tearoff=False)
 mainMenu.add_command(
     label = "Create new record",
     accelerator = "CTRL+N",
-    command = createView,
+    command = partial(createView, True),
     state="disabled"
 )
 
