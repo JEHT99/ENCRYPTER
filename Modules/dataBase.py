@@ -1,4 +1,4 @@
-import crypto
+from Modules import crypto
 import sqlite3
 import os
 import re
