@@ -128,7 +128,7 @@ class DataBase:
             return []
         
         if str(type(target)) != "<class 'int'>":
-            return 2
+            return []
         
         cur = (self.connection).cursor()
         try:
