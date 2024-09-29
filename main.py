@@ -12,7 +12,8 @@ def showMessage(option: int):
     messages=[
         ["Success","Operation has been completed"],
         ["Error", "Operation failed, try it again"],
-        ["Error", "Wrong key"]
+        ["Error", "Wrong key"],
+        ["Error", "Bad parameters"]
     ]
 
     if option in range(len(messages)):
@@ -24,6 +25,25 @@ def showMessage(option: int):
                                message=messages[option][1])
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def createView(event=None):
+    def submit():
+        key = read_key(keyPath.get())
+        if key == None:
+            showMessage(1)
+            return
+        
+        status = myDB.addRecord(website.get(), email.get(),password.get(),key)
+        
+        if status == 2:
+            showMessage(3)
+            return
+        
+        if status == 1 or status==3:
+            showMessage(1)
+            return
+
+        current.destroy()
+        showMessage(0)
+    #////////////////////////////////////////////////////////////////////////////////////////////////
     toplevel = ChildForm("Record creator", 300, 200)
     current = toplevel.getFormType()
 
@@ -31,28 +51,29 @@ def createView(event=None):
                 text="Website", fg_color="transparent")
     label1.place(x=10, y=20)
 
-    entry1 = customtkinter.CTkEntry(current,
+    website = customtkinter.CTkEntry(current,
                 placeholder_text="Google.com", width=200)
-    entry1.place(x=80, y=20)
+    website.place(x=80, y=20)
 
 
     label2 = customtkinter.CTkLabel(current,
                 text="Email", fg_color="transparent")
     label2.place(x=10, y=60)
 
-    entry2 = customtkinter.CTkEntry(current,
+    email = customtkinter.CTkEntry(current,
                 placeholder_text="example@gmail.com", width=200)
-    entry2.place(x=80, y=60)
+    email.place(x=80, y=60)
 
 
     label3 = customtkinter.CTkLabel(current,
                 text="Password", fg_color="transparent")
     label3.place(x=10, y=100)
 
-    entry3 = customtkinter.CTkEntry(current, width=200)
-    entry3.place(x=80, y=100)
+    password = customtkinter.CTkEntry(current, width=200)
+    password.place(x=80, y=100)
 
-    button = customtkinter.CTkButton(current, text="Accept", width=100, command=None)
+    button = customtkinter.CTkButton(current, text="Accept",
+                width=100, command=submit)
     button.place(x=180, y=150)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def editView(event=None):
@@ -146,5 +167,4 @@ opMenu.add_command(
 menuBar.add_cascade(menu=mainMenu, label="File")
 menuBar.add_cascade(menu=opMenu, label="Options")
 root.getFormType().config(menu=menuBar)
-
 root.run()
