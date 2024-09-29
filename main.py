@@ -126,6 +126,7 @@ def deleteView(event=None):
 
     if re.search("^\d+$", accountId) != None and myDB.deleteRecord(int(accountId)) == 0:
         showMessage(0)
+        tree.delete(int(accountId))
     else:
         showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
