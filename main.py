@@ -65,22 +65,20 @@ def createView(event=None, flag:bool=True, target=None):
     record = myDB.getRecord(target)
 
     if flag == True:
-        websiteU.set("")
-        emailU.set("")
+        websiteU.set("Example.com")
+        emailU.set("Example@email.com")
     elif len(record) == 0:
         showMessage(1)
-        return
+        current.destroy()
     else:
         websiteU.set(record[0][1])
         emailU.set(record[0][2])
-        
 
     label1 = customtkinter.CTkLabel(current,
                 text="Website", fg_color="transparent")
     label1.place(x=10, y=20)
 
-    website = customtkinter.CTkEntry(current,
-                placeholder_text="Google.com", width=200, textvariable=websiteU)
+    website = customtkinter.CTkEntry(current, width=200, textvariable=websiteU)
     website.place(x=80, y=20)
 
 
@@ -88,8 +86,7 @@ def createView(event=None, flag:bool=True, target=None):
                 text="Email", fg_color="transparent")
     label2.place(x=10, y=60)
 
-    email = customtkinter.CTkEntry(current,
-                placeholder_text="example@gmail.com", width=200, textvariable=emailU)
+    email = customtkinter.CTkEntry(current, width=200, textvariable=emailU)
     email.place(x=80, y=60)
 
 
