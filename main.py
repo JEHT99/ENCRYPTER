@@ -6,8 +6,9 @@ from crypto import generate_key, read_key
 import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #////////////////////////////////////////////////////////////////////////////////////////////////////
+# Global
 myDB = DataBase()
-#////////////////////////////////////////////////////////////////////////////////////////////////////
+shortcut = "disabled"
 def showMessage(option: int):
     messages=[
         ["Success","Operation has been completed"],
@@ -23,6 +24,14 @@ def showMessage(option: int):
         else:
             tk.messagebox.showerror(title=messages[option][0],
                                message=messages[option][1])
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+def activateShortCuts(form:object):
+    form.bind_all("<Control-n>",createView)
+    form.bind_all("<Control-N>",createView)
+    form.bind_all("<Control-e>",editView)
+    form.bind_all("<Control-E>",editView)
+    form.bind_all("<Control-d>",deleteView)
+    form.bind_all("<Control-D>",deleteView)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def createView(event=None):
     def submit():
@@ -105,6 +114,11 @@ def loadKeyView(event=None):
         
         keyPath.set(file)
         if keyPath.get() != "":
+            activateShortCuts(root.getFormType())
+            mainMenu.entryconfig("Create new record", state="normal")
+            mainMenu.entryconfig("Edit record", state="normal")
+            mainMenu.entryconfig("Delete record", state="normal")
+
             showMessage(0)
     #////////////////////////////////////////////////////////////////////////////////////////////////
     toplevel = ChildForm("RSA Key Loader", 400, 100)
@@ -129,26 +143,24 @@ mainMenu = tk.Menu(menuBar, tearoff=False)
 mainMenu.add_command(
     label = "Create new record",
     accelerator = "CTRL+N",
-    command = createView
+    command = createView,
+    state="disabled"
 )
-root.getFormType().bind_all("<Control-n>",createView)
-root.getFormType().bind_all("<Control-N>",createView)
+
 
 mainMenu.add_command(
     label = "Edit record",
     accelerator = "CTRL+E",
-    command = editView
+    command = editView,
+    state="disabled"
 )
-root.getFormType().bind_all("<Control-e>",editView)
-root.getFormType().bind_all("<Control-E>",editView)
 
 mainMenu.add_command(
     label = "Delete record",
     accelerator = "CTRL+D",
-    command = deleteView
+    command = deleteView,
+    state="disabled"
 )
-root.getFormType().bind_all("<Control-d>",deleteView)
-root.getFormType().bind_all("<Control-D>",deleteView)
 
 mainMenu.add_separator()
 mainMenu.add_command(label="Quit", command=root.getFormType().destroy)
@@ -168,3 +180,5 @@ menuBar.add_cascade(menu=mainMenu, label="File")
 menuBar.add_cascade(menu=opMenu, label="Options")
 root.getFormType().config(menu=menuBar)
 root.run()
+#////////////////////////////////////////////////////////////////////////////////////////////////////
+#////////////////////////////////////////////////////////////////////////////////////////////////////
