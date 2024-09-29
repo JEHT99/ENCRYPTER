@@ -25,6 +25,35 @@ def showMessage(option: int):
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def createView(event=None):
     toplevel = ChildForm("Record creator", 300, 200)
+    current = toplevel.getFormType()
+
+    label1 = customtkinter.CTkLabel(current,
+                text="Website", fg_color="transparent")
+    label1.place(x=10, y=20)
+
+    entry1 = customtkinter.CTkEntry(current,
+                placeholder_text="Google.com", width=200)
+    entry1.place(x=80, y=20)
+
+
+    label2 = customtkinter.CTkLabel(current,
+                text="Email", fg_color="transparent")
+    label2.place(x=10, y=60)
+
+    entry2 = customtkinter.CTkEntry(current,
+                placeholder_text="example@gmail.com", width=200)
+    entry2.place(x=80, y=60)
+
+
+    label3 = customtkinter.CTkLabel(current,
+                text="Password", fg_color="transparent")
+    label3.place(x=10, y=100)
+
+    entry3 = customtkinter.CTkEntry(current, width=200)
+    entry3.place(x=80, y=100)
+
+    button = customtkinter.CTkButton(current, text="Accept", width=100, command=None)
+    button.place(x=180, y=150)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def editView(event=None):
     print("Edit")
