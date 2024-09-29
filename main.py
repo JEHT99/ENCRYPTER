@@ -1,8 +1,8 @@
 import tkinter as tk
 import customtkinter
-from dataBase import DataBase
-from forms import ParentForm, ChildForm
-from crypto import generate_key, read_key
+from Modules.dataBase import DataBase
+from Modules.forms import ParentForm, ChildForm
+from Modules.crypto import generate_key, read_key
 import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #////////////////////////////////////////////////////////////////////////////////////////////////////
