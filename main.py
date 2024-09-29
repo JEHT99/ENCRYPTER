@@ -86,7 +86,17 @@ def createView(event=None):
     button.place(x=180, y=150)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def editView(event=None):
-    print("Edit")
+    dialog = customtkinter.CTkInputDialog(text="Type an Account ID to edit it:",
+                                          title="Edit account")
+    accountId = dialog.get_input()
+
+    if accountId == None:
+        return
+
+    if re.search("^\d+$", accountId) != None:
+        createView()
+    else:
+        showMessage(1)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def deleteView(event=None):
     dialog = customtkinter.CTkInputDialog(text="Type an Account ID to delete it:",
