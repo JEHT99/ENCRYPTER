@@ -138,11 +138,14 @@ def createKey(event=None):
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def loadKeyView(event=None):
     def loadKey():
+        tempPath = ""
         file = tk.filedialog.askopenfilename(title="Select",initialdir="C://",
                 filetypes=(("Token","*.key"),))
         
-        keyPath.set(file)
-        if keyPath.get() != "":
+        tempPath = file
+        
+        if tempPath != "":
+            keyPath.set(file)
             activateShortCuts(root.getFormType())
             mainMenu.entryconfig("Create new record", state="normal")
             mainMenu.entryconfig("Edit record", state="normal")
