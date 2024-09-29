@@ -27,8 +27,8 @@ def showMessage(option: int):
                                message=messages[option][1])
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 def activateShortCuts(form:object):
-    form.bind_all("<Control-n>",partial(createView,True))
-    form.bind_all("<Control-N>",partial(createView,True))
+    form.bind_all("<Control-n>",partial(createView,flag=True))
+    form.bind_all("<Control-N>",partial(createView,flag=True))
     form.bind_all("<Control-e>",editView)
     form.bind_all("<Control-E>",editView)
     form.bind_all("<Control-d>",deleteView)
@@ -70,6 +70,7 @@ def createView(event=None, flag:bool=True, target=None):
     elif len(record) == 0:
         showMessage(1)
         current.destroy()
+        return
     else:
         websiteU.set(record[0][1])
         emailU.set(record[0][2])
@@ -122,7 +123,7 @@ def deleteView(event=None):
     if accountId == None:
         return
 
-    if re.search("^\d+$", accountId) != None and myDB.deleteRecord(accountId):
+    if re.search("^\d+$", accountId) != None and myDB.deleteRecord(int(accountId)) == 0:
         showMessage(0)
     else:
         showMessage(1)
@@ -174,7 +175,7 @@ mainMenu = tk.Menu(menuBar, tearoff=False)
 mainMenu.add_command(
     label = "Create new record",
     accelerator = "CTRL+N",
-    command = partial(createView, True),
+    command = partial(createView, flag=True),
     state="disabled"
 )
 
