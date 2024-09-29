@@ -1,2 +1,4 @@
 dataBase.db
 crypto.key
+__pycache__/
+Modules/__pycache__/
