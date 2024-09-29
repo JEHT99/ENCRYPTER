@@ -1,9 +1,10 @@
 import tkinter as tk
+from tkinter import ttk
 import customtkinter
 from functools import partial
 from Modules.dataBase import DataBase
 from Modules.forms import ParentForm, ChildForm
-from Modules.crypto import generate_key, read_key
+from Modules.crypto import generate_key, read_key, decrypt_text
 import re
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,9 +162,24 @@ def loadKeyView(event=None):
                 width=50, height=30, corner_radius=100)
     upload.place(x=320, y=30)
 #////////////////////////////////////////////////////////////////////////////////////////////////////
+def showPassword(event=None):
+    selectedItem = tree.focus()
+    record = myDB.getRecord(int(selectedItem))
+
+    if len(record) == 0 or keyPath.get() == "":
+        return
+    
+    try:
+        currentPassword = read_key(keyPath.get())
+        if currentPassword != None:
+            tk.messagebox.showinfo(title="Current Password",
+                message=decrypt_text(currentPassword, record[0][3]))
+    except:
+        showMessage(2)
+#////////////////////////////////////////////////////////////////////////////////////////////////////
 #Form set up
 customtkinter.set_appearance_mode("dark")
-root = ParentForm("Passwords Encrypter", 600, 500)
+root = ParentForm("Passwords Encrypter", 600, 400)
 keyPath = tk.StringVar()
 websiteU = tk.StringVar()
 emailU = tk.StringVar()
@@ -172,45 +188,53 @@ emailU = tk.StringVar()
 menuBar = tk.Menu()
 #Create, Edit & Delete options
 mainMenu = tk.Menu(menuBar, tearoff=False)
-mainMenu.add_command(
-    label = "Create new record",
-    accelerator = "CTRL+N",
-    command = partial(createView, flag=True),
-    state="disabled"
-)
+mainMenu.add_command(label = "Create new record", accelerator = "CTRL+N",
+    command = partial(createView, flag=True), state="disabled")
 
+mainMenu.add_command(label = "Edit record", accelerator = "CTRL+E",
+    command = editView, state="disabled")
 
-mainMenu.add_command(
-    label = "Edit record",
-    accelerator = "CTRL+E",
-    command = editView,
-    state="disabled"
-)
-
-mainMenu.add_command(
-    label = "Delete record",
-    accelerator = "CTRL+D",
-    command = deleteView,
-    state="disabled"
-)
+mainMenu.add_command(label = "Delete record", accelerator = "CTRL+D",
+    command = deleteView, state="disabled")
 
 mainMenu.add_separator()
 mainMenu.add_command(label="Quit", command=root.getFormType().destroy)
 
 #RSA options
 opMenu = tk.Menu(menuBar, tearoff=False)
-opMenu.add_command(
-    label = "Generate key",
-    command = createKey
-)
-opMenu.add_command(
-    label = "Load key",
-    command = loadKeyView
-)
+opMenu.add_command(label = "Generate key", command = createKey)
+opMenu.add_command(label = "Load key", command = loadKeyView)
 
 menuBar.add_cascade(menu=mainMenu, label="File")
 menuBar.add_cascade(menu=opMenu, label="Options")
 root.getFormType().config(menu=menuBar)
+
+#Tree view
+records = myDB.getRecords()
+tree = ttk.Treeview(root.getFormType())
+
+# Define columns
+tree['columns'] = ("Website", "Email")
+
+# Format the columns
+tree.column("#0", width=50, minwidth=25)
+tree.column("Website", anchor=tk.CENTER, width=150)
+tree.column("Email", anchor=tk.CENTER, width=150)
+
+# Create column headers
+tree.heading("#0", text="ID", anchor=tk.CENTER)
+tree.heading("Website", text="Website", anchor=tk.CENTER)
+tree.heading("Email", text="Email", anchor=tk.CENTER)
+
+# Add data to the Treeview
+for item in records:
+    tree.insert(parent='', index='end', iid=item[0], text=item[0], values=(item[1],item[2]))
+
+tree.bind("<Double-1>", showPassword)
+
+# Pack the Treeview widget
+tree.pack(pady=20)
+
 root.run()
 #////////////////////////////////////////////////////////////////////////////////////////////////////
 #////////////////////////////////////////////////////////////////////////////////////////////////////
