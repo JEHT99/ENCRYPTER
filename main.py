@@ -58,6 +58,15 @@ def createView(event=None, flag:bool=True, target=None):
             return
 
         showMessage(0)
+        
+        for item in tree.get_children():
+            tree.delete(item)
+
+        records = myDB.getRecords()
+        for item in records:
+            tree.insert(parent='', index='end', iid=item[0], text=item[0],
+                values=(item[1],item[2]))
+
         current.destroy()
     #////////////////////////////////////////////////////////////////////////////////////////////////
     toplevel = ChildForm("Record Creator", 300, 200)
