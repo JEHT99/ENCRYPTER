@@ -162,7 +162,7 @@ def loadKeyView(event=None):
 
             showMessage(0)
     #////////////////////////////////////////////////////////////////////////////////////////////////
-    toplevel = ChildForm("RSA Key Loader", 400, 100)
+    toplevel = ChildForm("AES Key Loader", 400, 100)
 
     currentFile = customtkinter.CTkEntry(toplevel.getFormType(), width=300, state="readonly",
                     textvariable=keyPath)
@@ -210,7 +210,7 @@ mainMenu.add_command(label = "Delete record", accelerator = "CTRL+D",
 mainMenu.add_separator()
 mainMenu.add_command(label="Quit", command=root.getFormType().destroy)
 
-#RSA options
+#AES options
 opMenu = tk.Menu(menuBar, tearoff=False)
 opMenu.add_command(label = "Generate key", command = createKey)
 opMenu.add_command(label = "Load key", command = loadKeyView)
